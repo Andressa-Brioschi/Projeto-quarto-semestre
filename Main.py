@@ -1,4 +1,4 @@
-#COMENTARIO DE TESTE
+#COMENTARIO DE TESTE Andressa aqui
 from flask  import Flask, render_template, request, redirect, flash, url_for, session
 #permissão: pip install flask-sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
