@@ -16,11 +16,7 @@ class Cadastro_paciente(UsuarioBase):
     email = db.Column(db.String(200),  nullable=False)
     data_nasc = db.Column(db.String(200),  nullable=False)
     telefone = db.Column(db.String(11), nullable=False)
-    cep = db.Column(db.String(8), nullable=False)
-    rua = db.Column(db.String(200), nullable=True)
-    bairro = db.Column(db.String(200), nullable=True)
-    cidade = db.Column(db.String(200), nullable=True)
-    UF = db.Column(db.String(2), nullable=False)
+    
 
     #O UserMixin por padrão espera que exista um campo chamado id para usar como identificador,
     #mas já que cpf é o indentificador é necessáio usar a seguinte função para mudar o identificador padrão 

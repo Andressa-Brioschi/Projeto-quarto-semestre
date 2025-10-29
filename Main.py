@@ -1,5 +1,5 @@
 #COMENTARIO DE TESTE Andressa aqui
-from flask  import Flask, render_template, request, redirect, flash, url_for, session
+from flask  import Flask, render_template, request, redirect, flash, url_for, session, jsonify
 #permissão: pip install flask-sqlalchemy
 from flask_sqlalchemy import SQLAlchemy
 # biblioteca responsável pelo gerenciamneto do login (precisa do pip install flask-login ) 
@@ -44,7 +44,48 @@ def user_loader(cpf):
 
 @app.route("/cadastrar")
 def cadastrar_usuario():
-    return render_template("./cadastrar.html")
+    return render_template("./cadastrar_2.html")
+
+@app.route("/api_cadastrar", methods=['POST'])
+def api_cad():
+    data = request.get_json()
+    tipo_usuario = data.get('tipous')
+    nome = data.get('nome')
+    cpf = data.get('cpf')
+    email = data.get('email')
+    nasc = data.get('nasc')
+    tel = data.get('tel')
+    senha = data.get('senha')
+    senha_conf = data.get('senhaconf')
+    
+
+    novo_usuario = Cadastro_paciente(nome = nome, cpf = cpf, data_nasc = nasc,
+            email = email, senha = senha, telefone = tel, tipo_de_usuario = tipo_usuario)
+    
+    
+
+
+    #a  linha abaixo é equivalente a um select no banco, onde na clausula where vai o cpf imputado
+    user = db.session.query(Cadastro_paciente).filter_by(cpf = cpf).first()
+    
+    if user:
+        
+        return jsonify({"erro": "CPF já cadastrado"}), 400
+
+    else:
+        if senha != senha_conf:
+           return jsonify({"erro": "As senhas não coincidem"}), 400
+        else:    
+           
+            db.session.add(novo_usuario)
+
+            #a linha abaixo grava as alterações no banco de dados
+            db.session.commit()
+
+    return jsonify({"redirect": "/login"}), 200
+    
+
+    
 
 @app.route("/info_confirm")
 def confirmar_informacao():
